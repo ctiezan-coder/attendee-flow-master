@@ -8,6 +8,12 @@ import Sessions from "./pages/Sessions";
 import SessionDetail from "./pages/SessionDetail";
 import InscriptionForm from "./pages/InscriptionForm";
 import Participants from "./pages/Participants";
+import Emargement from "./pages/Emargement";
+import Notifications from "./pages/Notifications";
+import Reporting from "./pages/Reporting";
+import Attestations from "./pages/Attestations";
+import Hybride from "./pages/Hybride";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +30,12 @@ const App = () => (
           <Route path="/sessions/:id" element={<SessionDetail />} />
           <Route path="/inscription/:sessionId" element={<InscriptionForm />} />
           <Route path="/participants" element={<Participants />} />
+          <Route path="/emargement" element={<Emargement />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/reporting" element={<Reporting />} />
+          <Route path="/attestations" element={<Attestations />} />
+          <Route path="/hybride" element={<Hybride />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
