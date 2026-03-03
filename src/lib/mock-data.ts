@@ -191,3 +191,86 @@ export const kpis = {
   totalParticipants: participants.length,
   attestationsGenerees: 18,
 };
+
+export interface Emargement {
+  id: string;
+  participantId: string;
+  sessionId: string;
+  horodatage: string;
+  mode: "qr_code" | "lien_en_ligne";
+  present: boolean;
+}
+
+export const emargements: Emargement[] = [
+  { id: "1", participantId: "1", sessionId: "4", horodatage: "2026-02-20T09:05:12", mode: "qr_code", present: true },
+  { id: "2", participantId: "2", sessionId: "4", horodatage: "2026-02-20T09:02:45", mode: "qr_code", present: true },
+  { id: "3", participantId: "3", sessionId: "4", horodatage: "2026-02-20T09:10:30", mode: "lien_en_ligne", present: true },
+];
+
+export interface Notification {
+  id: string;
+  type: "confirmation" | "rappel_j2" | "rappel_j1" | "post_session" | "annulation";
+  destinataire: string;
+  sessionTitre: string;
+  canal: string;
+  dateEnvoi: string;
+  statut: "envoye" | "en_attente" | "echoue";
+}
+
+export const notifications: Notification[] = [
+  { id: "1", type: "confirmation", destinataire: "k.benali@entreprise.com", sessionTitre: "Fondamentaux de l'export", canal: "Email + SMS", dateEnvoi: "2026-02-15T10:00:00", statut: "envoye" },
+  { id: "2", type: "confirmation", destinataire: "s.laurent@agriplus.fr", sessionTitre: "Fondamentaux de l'export", canal: "Email + SMS", dateEnvoi: "2026-02-18T14:30:00", statut: "envoye" },
+  { id: "3", type: "rappel_j2", destinataire: "k.benali@entreprise.com", sessionTitre: "Fondamentaux de l'export", canal: "Email", dateEnvoi: "2026-03-13T08:00:00", statut: "en_attente" },
+  { id: "4", type: "rappel_j1", destinataire: "k.benali@entreprise.com", sessionTitre: "Fondamentaux de l'export", canal: "Email + SMS", dateEnvoi: "2026-03-14T08:00:00", statut: "en_attente" },
+  { id: "5", type: "post_session", destinataire: "k.benali@entreprise.com", sessionTitre: "Financement export", canal: "Email", dateEnvoi: "2026-02-21T09:00:00", statut: "envoye" },
+  { id: "6", type: "confirmation", destinataire: "f.diallo@textilux.com", sessionTitre: "Marchés africains", canal: "Email + SMS", dateEnvoi: "2026-02-20T16:00:00", statut: "envoye" },
+  { id: "7", type: "rappel_j2", destinataire: "f.diallo@textilux.com", sessionTitre: "Réglementation douanière", canal: "Email", dateEnvoi: "2026-03-20T08:00:00", statut: "en_attente" },
+];
+
+export interface Attestation {
+  id: string;
+  participantNom: string;
+  participantPrenom: string;
+  sessionTitre: string;
+  sessionDate: string;
+  thematique: string;
+  generee: boolean;
+  dateGeneration?: string;
+  envoyee: boolean;
+}
+
+export const attestations: Attestation[] = [
+  { id: "1", participantNom: "Benali", participantPrenom: "Karim", sessionTitre: "Financement et assurance à l'export", sessionDate: "2026-02-20", thematique: "Finance", generee: true, dateGeneration: "2026-02-21", envoyee: true },
+  { id: "2", participantNom: "Laurent", participantPrenom: "Sophie", sessionTitre: "Financement et assurance à l'export", sessionDate: "2026-02-20", thematique: "Finance", generee: true, dateGeneration: "2026-02-21", envoyee: true },
+  { id: "3", participantNom: "Diallo", participantPrenom: "Fatou", sessionTitre: "Financement et assurance à l'export", sessionDate: "2026-02-20", thematique: "Finance", generee: true, dateGeneration: "2026-02-21", envoyee: false },
+];
+
+export const reportingData = {
+  presenceParSession: [
+    { session: "Fondamentaux", inscrits: 24, presents: 0 },
+    { session: "Réglementation", inscrits: 18, presents: 0 },
+    { session: "Marchés africains", inscrits: 42, presents: 0 },
+    { session: "Financement", inscrits: 20, presents: 18 },
+    { session: "Marketing digital", inscrits: 12, presents: 0 },
+  ],
+  parSecteur: [
+    { name: "Technologie", value: 35 },
+    { name: "Agroalimentaire", value: 22 },
+    { name: "Textile", value: 18 },
+    { name: "Industrie", value: 15 },
+    { name: "Services", value: 10 },
+  ],
+  parNiveau: [
+    { name: "Débutant", value: 40 },
+    { name: "Intermédiaire", value: 38 },
+    { name: "Confirmé", value: 22 },
+  ],
+  evolutionMensuelle: [
+    { mois: "Oct", inscrits: 35, presents: 30 },
+    { mois: "Nov", inscrits: 48, presents: 42 },
+    { mois: "Déc", inscrits: 52, presents: 45 },
+    { mois: "Jan", inscrits: 60, presents: 54 },
+    { mois: "Fév", inscrits: 68, presents: 58 },
+    { mois: "Mar", inscrits: 84, presents: 0 },
+  ],
+};
