@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, LogIn } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import vdeLogo from "@/assets/vde-logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,10 +31,8 @@ const Login = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mx-auto mb-4">
-            <span className="text-accent-foreground font-bold text-lg">VDE</span>
-          </div>
-          <h1 className="text-xl font-semibold text-foreground">VDE Platform</h1>
+          <img src={vdeLogo} alt="VDE Logo" className="w-14 h-14 rounded-xl mx-auto mb-4" />
+          <h1 className="text-xl font-semibold text-foreground">FORMATION PLATEFORME</h1>
           <p className="text-sm text-muted-foreground mt-1">Connectez-vous pour accéder au back-office</p>
         </div>
 
