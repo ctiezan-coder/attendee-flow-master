@@ -77,11 +77,15 @@ const Login = () => {
           <img src={vdeLogo} alt="Logo" className="w-14 h-14 rounded-xl mx-auto mb-4" />
           <h1 className="text-xl font-semibold text-foreground">FORMATION PLATEFORME</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {mode === "login" ? "Connectez-vous pour accéder au back-office" : "Créez votre compte administrateur"}
+            {forgotMode
+              ? "Entrez votre email pour recevoir un lien de réinitialisation"
+              : mode === "login"
+                ? "Connectez-vous pour accéder au back-office"
+                : "Créez votre compte administrateur"}
           </p>
         </div>
 
-        <form onSubmit={mode === "login" ? handleLogin : handleSignup} className="stat-card space-y-4">
+        <form onSubmit={forgotMode ? handleForgotPassword : mode === "login" ? handleLogin : handleSignup} className="stat-card space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -93,28 +97,40 @@ const Login = () => {
               required
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Mot de passe</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
-          </div>
+          {!forgotMode && (
+            <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+          )}
           <Button type="submit" disabled={loading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : mode === "login" ? <LogIn className="w-4 h-4 mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
-            {mode === "login" ? "Se connecter" : "Créer le compte"}
+            {forgotMode ? "Envoyer le lien" : mode === "login" ? "Se connecter" : "Créer le compte"}
           </Button>
+
+          {mode === "login" && !forgotMode && (
+            <button
+              type="button"
+              onClick={() => setForgotMode(true)}
+              className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Mot de passe oublié ?
+            </button>
+          )}
 
           <button
             type="button"
-            onClick={() => setMode(mode === "login" ? "signup" : "login")}
+            onClick={() => { setForgotMode(false); setMode(mode === "login" ? "signup" : "login"); }}
             className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            {mode === "login" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
+            {forgotMode ? "Retour à la connexion" : mode === "login" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
           </button>
         </form>
       </div>
