@@ -14,105 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
-      attestations: {
+      admins: {
+        Row: {
+          actif: boolean
+          created_at: string
+          email: string
+          id: string
+          nom_complet: string | null
+          role: string
+        }
+        Insert: {
+          actif?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          nom_complet?: string | null
+          role?: string
+        }
+        Update: {
+          actif?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          nom_complet?: string | null
+          role?: string
+        }
+        Relationships: []
+      }
+      formations: {
         Row: {
           created_at: string
-          date_envoi: string | null
-          date_generation: string | null
-          envoyee: boolean
-          generee: boolean
+          date_debut: string
+          duree: string | null
+          formateur: string | null
           id: string
-          inscription_id: string
-          pdf_url: string | null
+          lieu: string | null
+          places: number
+          statut: string
+          theme: string
+          titre: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
-          date_envoi?: string | null
-          date_generation?: string | null
-          envoyee?: boolean
-          generee?: boolean
+          date_debut: string
+          duree?: string | null
+          formateur?: string | null
           id?: string
-          inscription_id: string
-          pdf_url?: string | null
+          lieu?: string | null
+          places?: number
+          statut?: string
+          theme: string
+          titre: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
-          date_envoi?: string | null
-          date_generation?: string | null
-          envoyee?: boolean
-          generee?: boolean
+          date_debut?: string
+          duree?: string | null
+          formateur?: string | null
           id?: string
-          inscription_id?: string
-          pdf_url?: string | null
+          lieu?: string | null
+          places?: number
+          statut?: string
+          theme?: string
+          titre?: string
+          updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "attestations_inscription_id_fkey"
-            columns: ["inscription_id"]
-            isOneToOne: false
-            referencedRelation: "inscriptions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      emargements: {
-        Row: {
-          horodatage: string
-          id: string
-          inscription_id: string
-          mode: Database["public"]["Enums"]["emargement_mode"]
-        }
-        Insert: {
-          horodatage?: string
-          id?: string
-          inscription_id: string
-          mode?: Database["public"]["Enums"]["emargement_mode"]
-        }
-        Update: {
-          horodatage?: string
-          id?: string
-          inscription_id?: string
-          mode?: Database["public"]["Enums"]["emargement_mode"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "emargements_inscription_id_fkey"
-            columns: ["inscription_id"]
-            isOneToOne: true
-            referencedRelation: "inscriptions"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       inscriptions: {
         Row: {
-          annulee: boolean
           created_at: string
+          date_inscription: string
+          formation_id: string
           id: string
-          mode_participation: Database["public"]["Enums"]["session_mode"]
           participant_id: string
-          qr_code: string | null
-          session_id: string
+          statut: string
         }
         Insert: {
-          annulee?: boolean
           created_at?: string
+          date_inscription?: string
+          formation_id: string
           id?: string
-          mode_participation?: Database["public"]["Enums"]["session_mode"]
           participant_id: string
-          qr_code?: string | null
-          session_id: string
+          statut?: string
         }
         Update: {
-          annulee?: boolean
           created_at?: string
+          date_inscription?: string
+          formation_id?: string
           id?: string
-          mode_participation?: Database["public"]["Enums"]["session_mode"]
           participant_id?: string
-          qr_code?: string | null
-          session_id?: string
+          statut?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "inscriptions_formation_id_fkey"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inscriptions_formation_id_fkey"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "v_inscriptions"
+            referencedColumns: ["formation_id"]
+          },
+          {
+            foreignKeyName: "inscriptions_formation_id_fkey"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "v_taux_remplissage"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "inscriptions_participant_id_fkey"
             columns: ["participant_id"]
@@ -121,87 +138,47 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "inscriptions_session_id_fkey"
-            columns: ["session_id"]
+            foreignKeyName: "inscriptions_participant_id_fkey"
+            columns: ["participant_id"]
             isOneToOne: false
-            referencedRelation: "sessions"
-            referencedColumns: ["id"]
+            referencedRelation: "v_inscriptions"
+            referencedColumns: ["participant_id"]
           },
         ]
       }
-      intervenants: {
+      participant_secteurs: {
         Row: {
-          bio: string | null
-          created_at: string
-          id: string
-          nom: string
-          organisation: string
-          photo_url: string | null
-          titre: string
-          updated_at: string
+          participant_id: string
+          secteur_id: number
         }
         Insert: {
-          bio?: string | null
-          created_at?: string
-          id?: string
-          nom: string
-          organisation: string
-          photo_url?: string | null
-          titre: string
-          updated_at?: string
+          participant_id: string
+          secteur_id: number
         }
         Update: {
-          bio?: string | null
-          created_at?: string
-          id?: string
-          nom?: string
-          organisation?: string
-          photo_url?: string | null
-          titre?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      notifications: {
-        Row: {
-          canal: string
-          contenu: string | null
-          created_at: string
-          date_envoi: string | null
-          destinataire_email: string
-          id: string
-          session_id: string | null
-          statut: Database["public"]["Enums"]["notification_statut"]
-          type: Database["public"]["Enums"]["notification_type"]
-        }
-        Insert: {
-          canal?: string
-          contenu?: string | null
-          created_at?: string
-          date_envoi?: string | null
-          destinataire_email: string
-          id?: string
-          session_id?: string | null
-          statut?: Database["public"]["Enums"]["notification_statut"]
-          type: Database["public"]["Enums"]["notification_type"]
-        }
-        Update: {
-          canal?: string
-          contenu?: string | null
-          created_at?: string
-          date_envoi?: string | null
-          destinataire_email?: string
-          id?: string
-          session_id?: string | null
-          statut?: Database["public"]["Enums"]["notification_statut"]
-          type?: Database["public"]["Enums"]["notification_type"]
+          participant_id?: string
+          secteur_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "notifications_session_id_fkey"
-            columns: ["session_id"]
+            foreignKeyName: "participant_secteurs_participant_id_fkey"
+            columns: ["participant_id"]
             isOneToOne: false
-            referencedRelation: "sessions"
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participant_secteurs_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "v_inscriptions"
+            referencedColumns: ["participant_id"]
+          },
+          {
+            foreignKeyName: "participant_secteurs_secteur_id_fkey"
+            columns: ["secteur_id"]
+            isOneToOne: false
+            referencedRelation: "secteurs"
             referencedColumns: ["id"]
           },
         ]
@@ -210,155 +187,168 @@ export type Database = {
         Row: {
           created_at: string
           email: string
-          entreprise: string
-          fonction: string
           id: string
-          niveau_export: Database["public"]["Enums"]["niveau_export"]
-          nom: string
-          prenom: string
-          secteur: string
-          taille: string
-          telephone: string
+          nom_dirigeant: string
+          nom_entreprise: string
+          source_id: number | null
+          telephone: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           email: string
-          entreprise: string
-          fonction: string
           id?: string
-          niveau_export?: Database["public"]["Enums"]["niveau_export"]
-          nom: string
-          prenom: string
-          secteur: string
-          taille: string
-          telephone: string
+          nom_dirigeant: string
+          nom_entreprise: string
+          source_id?: number | null
+          telephone?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           email?: string
-          entreprise?: string
-          fonction?: string
           id?: string
-          niveau_export?: Database["public"]["Enums"]["niveau_export"]
-          nom?: string
-          prenom?: string
-          secteur?: string
-          taille?: string
-          telephone?: string
+          nom_dirigeant?: string
+          nom_entreprise?: string
+          source_id?: number | null
+          telephone?: string | null
           updated_at?: string
-        }
-        Relationships: []
-      }
-      session_intervenants: {
-        Row: {
-          id: string
-          intervenant_id: string
-          session_id: string
-        }
-        Insert: {
-          id?: string
-          intervenant_id: string
-          session_id: string
-        }
-        Update: {
-          id?: string
-          intervenant_id?: string
-          session_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "session_intervenants_intervenant_id_fkey"
-            columns: ["intervenant_id"]
+            foreignKeyName: "participants_source_id_fkey"
+            columns: ["source_id"]
             isOneToOne: false
-            referencedRelation: "intervenants"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "session_intervenants_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "sessions"
+            referencedRelation: "sources_information"
             referencedColumns: ["id"]
           },
         ]
       }
-      sessions: {
+      presences: {
         Row: {
-          created_at: string
-          date_session: string
-          description: string | null
-          horaire: string
+          enregistre_le: string
+          enregistre_par: string | null
           id: string
-          lien_replay: string | null
-          lien_visio: string | null
-          lieu: string
-          mode: Database["public"]["Enums"]["session_mode"]
-          places: number
-          statut: Database["public"]["Enums"]["session_statut"]
-          thematique: string
-          titre: string
-          updated_at: string
+          inscription_id: string
+          note: string | null
+          present: boolean
         }
         Insert: {
-          created_at?: string
-          date_session: string
-          description?: string | null
-          horaire: string
+          enregistre_le?: string
+          enregistre_par?: string | null
           id?: string
-          lien_replay?: string | null
-          lien_visio?: string | null
-          lieu: string
-          mode?: Database["public"]["Enums"]["session_mode"]
-          places?: number
-          statut?: Database["public"]["Enums"]["session_statut"]
-          thematique: string
-          titre: string
-          updated_at?: string
+          inscription_id: string
+          note?: string | null
+          present?: boolean
         }
         Update: {
-          created_at?: string
-          date_session?: string
-          description?: string | null
-          horaire?: string
+          enregistre_le?: string
+          enregistre_par?: string | null
           id?: string
-          lien_replay?: string | null
-          lien_visio?: string | null
-          lieu?: string
-          mode?: Database["public"]["Enums"]["session_mode"]
-          places?: number
-          statut?: Database["public"]["Enums"]["session_statut"]
-          thematique?: string
-          titre?: string
-          updated_at?: string
+          inscription_id?: string
+          note?: string | null
+          present?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presences_inscription_id_fkey"
+            columns: ["inscription_id"]
+            isOneToOne: true
+            referencedRelation: "inscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "presences_inscription_id_fkey"
+            columns: ["inscription_id"]
+            isOneToOne: true
+            referencedRelation: "v_inscriptions"
+            referencedColumns: ["inscription_id"]
+          },
+        ]
+      }
+      secteurs: {
+        Row: {
+          id: number
+          nom: string
+        }
+        Insert: {
+          id?: number
+          nom: string
+        }
+        Update: {
+          id?: number
+          nom?: string
+        }
+        Relationships: []
+      }
+      sources_information: {
+        Row: {
+          id: number
+          nom: string
+        }
+        Insert: {
+          id?: number
+          nom: string
+        }
+        Update: {
+          id?: number
+          nom?: string
         }
         Relationships: []
       }
     }
     Views: {
-      [_ in never]: never
+      v_inscriptions: {
+        Row: {
+          date_debut: string | null
+          date_inscription: string | null
+          email: string | null
+          formation_id: string | null
+          formation_titre: string | null
+          inscription_id: string | null
+          lieu: string | null
+          nom_dirigeant: string | null
+          nom_entreprise: string | null
+          participant_id: string | null
+          present: boolean | null
+          source: string | null
+          statut_formation: string | null
+          statut_inscription: string | null
+          telephone: string | null
+          theme: string | null
+        }
+        Relationships: []
+      }
+      v_stats_dashboard: {
+        Row: {
+          formations_a_venir: number | null
+          formations_terminees: number | null
+          total_formations: number | null
+          total_inscrits: number | null
+          total_participants: number | null
+          total_presents: number | null
+        }
+        Relationships: []
+      }
+      v_taux_remplissage: {
+        Row: {
+          date_debut: string | null
+          id: string | null
+          inscrits: number | null
+          places: number | null
+          statut: string | null
+          taux_pct: number | null
+          theme: string | null
+          titre: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
     }
     Enums: {
-      emargement_mode: "qr_code" | "lien_en_ligne"
-      niveau_export: "debutant" | "intermediaire" | "confirme"
-      notification_statut: "envoye" | "en_attente" | "echoue"
-      notification_type:
-        | "confirmation"
-        | "rappel_j2"
-        | "rappel_j1"
-        | "post_session"
-        | "annulation"
-      session_mode: "presentiel" | "en_ligne" | "hybride"
-      session_statut:
-        | "brouillon"
-        | "publiee"
-        | "en_cours"
-        | "terminee"
-        | "annulee"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -485,25 +475,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      emargement_mode: ["qr_code", "lien_en_ligne"],
-      niveau_export: ["debutant", "intermediaire", "confirme"],
-      notification_statut: ["envoye", "en_attente", "echoue"],
-      notification_type: [
-        "confirmation",
-        "rappel_j2",
-        "rappel_j1",
-        "post_session",
-        "annulation",
-      ],
-      session_mode: ["presentiel", "en_ligne", "hybride"],
-      session_statut: [
-        "brouillon",
-        "publiee",
-        "en_cours",
-        "terminee",
-        "annulee",
-      ],
-    },
+    Enums: {},
   },
 } as const
