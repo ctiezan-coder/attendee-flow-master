@@ -345,7 +345,7 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      is_active_admin: { Args: { check_email: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
