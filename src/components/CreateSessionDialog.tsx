@@ -133,7 +133,7 @@ const CreateSessionDialog = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Lieu</Label>
-              <Input value={form.lieu} onChange={(e) => update("lieu", e.target.value)} placeholder="Ex: Abidjan, ACIEX" />
+              <Input value={form.lieu} onChange={(e) => update("lieu", e.target.value)} placeholder="Ex: Abidjan, Agence CI Export" />
             </div>
             <div className="space-y-2">
               <Label>Formateur</Label>
