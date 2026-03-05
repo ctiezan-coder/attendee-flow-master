@@ -162,7 +162,7 @@ const InscriptionForm = () => {
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="stat-card max-w-md w-full text-center py-10">
           <div className="flex justify-center mb-4">
-            <img src={vdeLogo} alt="ACIEX" className="w-10 h-10 rounded-lg" />
+            <img src={vdeLogo} alt="Agence CI Export" className="w-10 h-10 rounded-lg" />
           </div>
           <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-7 h-7 text-success" />
@@ -217,7 +217,7 @@ const InscriptionForm = () => {
           >
             <ArrowLeft className="w-4 h-4" /> Retour
           </button>
-          <img src={vdeLogo} alt="ACIEX" className="w-8 h-8 rounded-lg" />
+          <img src={vdeLogo} alt="Agence CI Export" className="w-8 h-8 rounded-lg" />
         </div>
 
         <div className="stat-card mb-6">
