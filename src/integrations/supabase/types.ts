@@ -345,6 +345,18 @@ export type Database = {
       }
     }
     Functions: {
+      inscrire_participant: {
+        Args: {
+          p_email: string
+          p_formation_id: string
+          p_nom_dirigeant: string
+          p_nom_entreprise: string
+          p_secteur_ids?: number[]
+          p_source_id?: number
+          p_telephone: string
+        }
+        Returns: undefined
+      }
       is_active_admin: { Args: { check_email: string }; Returns: boolean }
     }
     Enums: {

@@ -69,46 +69,16 @@ const InscriptionForm = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: InscriptionData) => {
-      // Upsert participant by email
-      const { data: participant, error: pErr } = await supabase
-        .from("participants")
-        .upsert(
-          {
-            nom_entreprise: data.nom_entreprise,
-            nom_dirigeant: data.nom_dirigeant,
-            email: data.email,
-            telephone: data.telephone,
-            source_id: data.source_id || null,
-          },
-          { onConflict: "email" }
-        )
-        .select("id")
-        .single();
-      if (pErr) throw pErr;
-
-      // Insert participant_secteurs
-      if (data.secteur_ids.length > 0) {
-        const secteurRows = data.secteur_ids.map((sid) => ({
-          participant_id: participant.id,
-          secteur_id: sid,
-        }));
-        // Delete existing then insert (upsert not easy with composite PK)
-        await supabase
-          .from("participant_secteurs")
-          .delete()
-          .eq("participant_id", participant.id);
-        const { error: sErr } = await supabase
-          .from("participant_secteurs")
-          .insert(secteurRows);
-        if (sErr) throw sErr;
-      }
-
-      // Create inscription
-      const { error: iErr } = await supabase.from("inscriptions").insert({
-        formation_id: formationId!,
-        participant_id: participant.id,
+      const { error } = await supabase.rpc("inscrire_participant", {
+        p_formation_id: formationId!,
+        p_nom_entreprise: data.nom_entreprise,
+        p_nom_dirigeant: data.nom_dirigeant,
+        p_email: data.email,
+        p_telephone: data.telephone,
+        p_source_id: data.source_id || null,
+        p_secteur_ids: data.secteur_ids,
       });
-      if (iErr) throw iErr;
+      if (error) throw error;
 
       const qrCode = `${window.location.origin}/inscription/${formationId}`;
       return { qrCode, nom: data.nom_dirigeant };
