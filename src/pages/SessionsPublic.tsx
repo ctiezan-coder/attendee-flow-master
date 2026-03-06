@@ -45,7 +45,7 @@ const SessionsPublic = () => {
       <header className="border-b border-border bg-card">
         <div className="max-w-5xl mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src={vdeLogo} alt="Agence CI Export" className="w-10 h-10 rounded-lg" />
+            <img src={ciExportLogo} alt="Agence CI Export" className="h-12 object-contain" />
             <div>
               <h1 className="text-2xl font-bold text-foreground">FORMATION PLATEFORME</h1>
               <p className="text-muted-foreground text-sm mt-0.5">
