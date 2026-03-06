@@ -13,7 +13,7 @@ import { fr } from "date-fns/locale";
 import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { QRCodeSVG } from "qrcode.react";
-import ciExportLogo from "@/assets/ci-export-logo.png";
+import ciExportLogo from "@/assets/ci-export-logo-blanc.png";
 
 const inscriptionSchema = z.object({
   nom_entreprise: z.string().trim().min(1, "Requis").max(255),
