@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { QRCodeSVG } from "qrcode.react";
 import vdeLogo from "@/assets/vde-logo.png";
+import ciExportLogo from "@/assets/ci-export-logo.jpeg";
 
 const BASE_URL = window.location.origin;
 
