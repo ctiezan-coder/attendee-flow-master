@@ -7,13 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Calendar, MapPin, CheckCircle, Loader2, Download, QrCode, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, CheckCircle, Loader2, Download, QrCode, Clock, Facebook, Instagram, Linkedin, Twitter, Mail, Phone, MapPinned } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { QRCodeSVG } from "qrcode.react";
-import vdeLogo from "@/assets/vde-logo.png";
+import ciExportLogo from "@/assets/ci-export-logo.png";
 
 const inscriptionSchema = z.object({
   nom_entreprise: z.string().trim().min(1, "Requis").max(255),
@@ -159,47 +159,47 @@ const InscriptionForm = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="stat-card max-w-md w-full text-center py-10">
-          <div className="flex justify-center mb-4">
-            <img src={vdeLogo} alt="Agence CI Export" className="w-10 h-10 rounded-lg" />
-          </div>
-          <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-7 h-7 text-success" />
-          </div>
-          <h2 className="text-xl font-semibold text-foreground mb-1">Inscription confirmée !</h2>
-          <p className="text-sm text-muted-foreground mb-1">{inscriptionInfo?.nom}</p>
-          <p className="text-xs text-muted-foreground mb-6">
-            {formation.titre} — {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
-          </p>
+      <div className="min-h-screen bg-background flex flex-col">
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="stat-card max-w-md w-full text-center py-10">
+            <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-7 h-7 text-success" />
+            </div>
+            <h2 className="text-xl font-semibold text-foreground mb-1">Inscription confirmée !</h2>
+            <p className="text-sm text-muted-foreground mb-1">{inscriptionInfo?.nom}</p>
+            <p className="text-xs text-muted-foreground mb-6">
+              {formation.titre} — {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
+            </p>
 
-          <div className="bg-background rounded-xl p-6 border border-border mb-4 inline-block">
-            <QRCodeSVG
-              id="qr-code-svg"
-              value={qrCodeValue}
-              size={200}
-              level="H"
-              includeMargin
-              bgColor="transparent"
-              fgColor="hsl(222, 47%, 11%)"
-            />
-          </div>
+            <div className="bg-background rounded-xl p-6 border border-border mb-4 inline-block">
+              <QRCodeSVG
+                id="qr-code-svg"
+                value={qrCodeValue}
+                size={200}
+                level="H"
+                includeMargin
+                bgColor="transparent"
+                fgColor="hsl(222, 47%, 11%)"
+              />
+            </div>
 
-          <p className="text-xs text-muted-foreground mb-4">
-            <QrCode className="w-3.5 h-3.5 inline mr-1" />
-            Conservez ce QR code pour accéder à la formation
-          </p>
+            <p className="text-xs text-muted-foreground mb-4">
+              <QrCode className="w-3.5 h-3.5 inline mr-1" />
+              Conservez ce QR code pour accéder à la formation
+            </p>
 
-          <div className="flex flex-col gap-2">
-            <Button onClick={handleDownloadQR} variant="outline" className="gap-2">
-              <Download className="w-4 h-4" />
-              Télécharger le QR code
-            </Button>
-            <Button variant="ghost" onClick={() => navigate("/")} className="text-sm">
-              Voir les autres formations
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button onClick={handleDownloadQR} variant="outline" className="gap-2">
+                <Download className="w-4 h-4" />
+                Télécharger le QR code
+              </Button>
+              <Button variant="ghost" onClick={() => navigate("/")} className="text-sm">
+                Voir les autres formations
+              </Button>
+            </div>
           </div>
         </div>
+        <InscriptionFooter />
       </div>
     );
   }
@@ -208,18 +208,25 @@ const InscriptionForm = () => {
     errors[field] ? <p className="text-xs text-destructive">{errors[field]}</p> : null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header */}
+      <header className="border-b border-border bg-green-700">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">FORMATION PLATEFORME</h1>
+            <p className="text-green-100 text-sm mt-0.5">Inscription à une formation</p>
+          </div>
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-green-100 hover:text-white transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Retour
+            <ArrowLeft className="w-4 h-4" /> Retour aux formations
           </button>
-          <img src={vdeLogo} alt="Agence CI Export" className="w-8 h-8 rounded-lg" />
         </div>
+      </header>
 
+      {/* Content full-width */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
         <div className="stat-card mb-6">
           <span className="text-xs font-medium text-accent uppercase tracking-wide">{formation.theme}</span>
           <h1 className="text-xl font-semibold text-foreground mt-1">{formation.titre}</h1>
@@ -314,9 +321,75 @@ const InscriptionForm = () => {
             Confirmer l'inscription
           </Button>
         </form>
-      </div>
+      </main>
+
+      <InscriptionFooter />
     </div>
   );
 };
+
+const InscriptionFooter = () => (
+  <footer className="bg-zinc-900 text-zinc-300 mt-16">
+    <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="space-y-4">
+        <img src={ciExportLogo} alt="Agence CI Export" className="h-14 object-contain" />
+        <p className="text-sm text-zinc-400">Agence Côte d'Ivoire Export</p>
+        <div className="flex gap-3 pt-2">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+            <Facebook className="w-4 h-4 text-white" />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+            <Instagram className="w-4 h-4 text-white" />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+            <Twitter className="w-4 h-4 text-white" />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+            <Linkedin className="w-4 h-4 text-white" />
+          </a>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="text-white font-semibold text-lg">Coordonnées</h3>
+        <div className="space-y-3 text-sm">
+          <div className="flex items-start gap-2">
+            <MapPinned className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+            <span>Immeuble CGRAE, Adjamé-Indénié, Abidjan</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <Phone className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+            <span>+225 27 20 28 67 53 / +225 07 67 22 99 36</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <Mail className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+            <span>info@cotedivoirexport.ci</span>
+          </div>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="text-white font-semibold text-lg">Navigation</h3>
+        <ul className="space-y-2 text-sm">
+          <li><a href="/" className="hover:text-orange-400 transition-colors">Accueil</a></li>
+          <li><a href="#" className="hover:text-orange-400 transition-colors">A propos</a></li>
+          <li><a href="#" className="hover:text-orange-400 transition-colors">Offres de services</a></li>
+          <li><a href="#" className="hover:text-orange-400 transition-colors">Programmes</a></li>
+        </ul>
+      </div>
+      <div className="space-y-4">
+        <h3 className="text-white font-semibold text-lg">Newsletter</h3>
+        <p className="text-sm text-zinc-400">Inscrivez-vous à notre newsletter pour recevoir les dernières actualités.</p>
+      </div>
+    </div>
+    <div className="border-t border-zinc-800">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-2">
+        <span>© Copyright 2025 Agence Côte d'Ivoire Export</span>
+        <div className="flex gap-4">
+          <a href="#" className="hover:text-zinc-300 transition-colors">Politique de confidentialité</a>
+          <a href="#" className="hover:text-zinc-300 transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default InscriptionForm;
