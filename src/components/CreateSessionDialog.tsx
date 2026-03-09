@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, ImagePlus, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface FormationFormData {
@@ -36,10 +36,44 @@ const themes = ["Export", "Logistique", "Finance", "Marketing"];
 const CreateSessionDialog = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormationFormData>(defaultForm);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const queryClient = useQueryClient();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "Image trop volumineuse", description: "Max 5 Mo", variant: "destructive" });
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
 
   const mutation = useMutation({
     mutationFn: async (data: FormationFormData) => {
+      let image_url: string | null = null;
+
+      if (imageFile) {
+        const ext = imageFile.name.split(".").pop();
+        const fileName = `${crypto.randomUUID()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from("formations")
+          .upload(fileName, imageFile, { contentType: imageFile.type });
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from("formations")
+          .getPublicUrl(fileName);
+        image_url = urlData.publicUrl;
+      }
+
       const { error } = await supabase.from("formations").insert({
         titre: data.titre,
         theme: data.theme,
@@ -49,6 +83,7 @@ const CreateSessionDialog = () => {
         formateur: data.formateur || null,
         places: data.places,
         statut: data.statut,
+        image_url,
       });
       if (error) throw error;
     },
@@ -56,6 +91,8 @@ const CreateSessionDialog = () => {
       toast({ title: "Formation créée !" });
       queryClient.invalidateQueries({ queryKey: ["admin-formations"] });
       setForm(defaultForm);
+      setImageFile(null);
+      setImagePreview(null);
       setOpen(false);
     },
     onError: (err: any) => {
@@ -91,6 +128,30 @@ const CreateSessionDialog = () => {
           <div className="space-y-2">
             <Label>Titre *</Label>
             <Input value={form.titre} onChange={(e) => update("titre", e.target.value)} placeholder="Titre de la formation" />
+          </div>
+
+          {/* Image upload */}
+          <div className="space-y-2">
+            <Label>Image de présentation</Label>
+            {imagePreview ? (
+              <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
+                <img src={imagePreview} alt="Aperçu" className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-background/80 flex items-center justify-center hover:bg-background transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-accent/50 hover:bg-muted/30 transition-colors">
+                <ImagePlus className="w-8 h-8 text-muted-foreground mb-2" />
+                <span className="text-sm text-muted-foreground">Cliquez pour ajouter une image</span>
+                <span className="text-xs text-muted-foreground mt-1">JPG, PNG — Max 5 Mo</span>
+                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+              </label>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
