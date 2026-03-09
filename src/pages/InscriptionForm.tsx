@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   ArrowLeft,
+  GraduationCap,
   Calendar,
   MapPin,
   CheckCircle,
@@ -319,6 +320,10 @@ const InscriptionForm = () => {
           <span className="text-xs font-medium text-accent uppercase tracking-wide">{formation.theme}</span>
           <h1 className="text-2xl font-bold text-foreground mt-2">{formation.titre}</h1>
           <div className="mt-4 space-y-2 text-lg text-muted-foreground">
+            <p className="flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-accent" />
+              <span className="font-bold text-foreground">Thème :</span> {formation.theme}
+            </p>
             <p className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-accent" />
               <span className="font-semibold text-foreground">Date :</span>{" "}
