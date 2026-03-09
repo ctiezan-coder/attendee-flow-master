@@ -48,6 +48,7 @@ export type Database = {
           duree: string | null
           formateur: string | null
           id: string
+          image_url: string | null
           lieu: string | null
           places: number
           statut: string
@@ -61,6 +62,7 @@ export type Database = {
           duree?: string | null
           formateur?: string | null
           id?: string
+          image_url?: string | null
           lieu?: string | null
           places?: number
           statut?: string
@@ -74,6 +76,7 @@ export type Database = {
           duree?: string | null
           formateur?: string | null
           id?: string
+          image_url?: string | null
           lieu?: string | null
           places?: number
           statut?: string
