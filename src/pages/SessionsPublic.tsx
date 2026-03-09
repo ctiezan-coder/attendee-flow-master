@@ -158,8 +158,13 @@ const SessionsPublic = () => {
                     <h3 className="text-base sm:text-lg font-bold text-foreground leading-snug">{formation.titre}</h3>
                     <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
                       <span className="flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4 text-accent shrink-0" />
+                        <span className="font-bold text-foreground">Thème :</span>
+                        {formation.theme}
+                      </span>
+                      <span className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-accent shrink-0" />
-                        <span className="font-medium text-foreground">Date :</span>
+                        <span className="font-bold text-foreground">Date :</span>
                         {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
                       </span>
                       {formation.duree && (
