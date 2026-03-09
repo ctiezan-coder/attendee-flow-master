@@ -40,9 +40,14 @@ const statusColors: Record<string, string> = {
   "Annulée": "bg-destructive/10 text-destructive",
 };
 
+const SUPERADMIN_EMAILS = ["t.coulibaly@cotedivoirexport.ci", "h.cisse@cotedivoirexport.ci"];
+
 const Sessions = () => {
   const [filter, setFilter] = useState<FormationStatut>("all");
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const isSuperAdmin = user?.email ? SUPERADMIN_EMAILS.includes(user.email) : false;
 
   const { data: formations, isLoading } = useQuery({
     queryKey: ["admin-formations"],
