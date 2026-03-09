@@ -32,6 +32,7 @@ const App = () => (
             {/* Public routes */}
             <Route path="/" element={<SessionsPublic />} />
             <Route path="/formations" element={<SessionsPublic />} />
+            <Route path="/sessions/:id" element={<SessionDetail />} />
             <Route path="/inscription/:sessionId" element={<InscriptionForm />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />
