@@ -433,6 +433,82 @@ const InscriptionForm = () => {
             </Select>
           </div>
 
+          {/* Custom fields */}
+          {customFields && customFields.length > 0 && (
+            <>
+              <hr className="border-border" />
+              <div className="space-y-4">
+                <Label className="text-base font-semibold">Informations complémentaires</Label>
+                {customFields.map((field) => (
+                  <div key={field.id} className="space-y-2">
+                    <Label htmlFor={`custom_${field.id}`}>
+                      {field.label} {field.required && "*"}
+                    </Label>
+                    {field.field_type === "text" && (
+                      <Input
+                        id={`custom_${field.id}`}
+                        value={customValues[field.id] || ""}
+                        onChange={(e) => {
+                          setCustomValues((prev) => ({ ...prev, [field.id]: e.target.value }));
+                          setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
+                        }}
+                        placeholder={field.label}
+                      />
+                    )}
+                    {field.field_type === "number" && (
+                      <Input
+                        id={`custom_${field.id}`}
+                        type="number"
+                        value={customValues[field.id] || ""}
+                        onChange={(e) => {
+                          setCustomValues((prev) => ({ ...prev, [field.id]: e.target.value }));
+                          setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
+                        }}
+                        placeholder={field.label}
+                      />
+                    )}
+                    {field.field_type === "select" && (
+                      <Select
+                        value={customValues[field.id] || ""}
+                        onValueChange={(v) => {
+                          setCustomValues((prev) => ({ ...prev, [field.id]: v }));
+                          setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.isArray(field.options) && (field.options as string[]).map((opt) => (
+                            <SelectItem key={opt} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    {field.field_type === "checkbox" && (
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id={`custom_${field.id}`}
+                          checked={customValues[field.id] === "true"}
+                          onCheckedChange={(checked) => {
+                            setCustomValues((prev) => ({ ...prev, [field.id]: checked ? "true" : "false" }));
+                            setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
+                          }}
+                        />
+                        <label htmlFor={`custom_${field.id}`} className="text-sm cursor-pointer">
+                          {field.label}
+                        </label>
+                      </div>
+                    )}
+                    <FieldError field={`custom_${field.id}`} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
           <Button
             type="submit"
             disabled={mutation.isPending}
