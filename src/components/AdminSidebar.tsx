@@ -21,6 +21,7 @@ const navigation = [
   { name: "Émargement", href: "/admin/emargement", icon: ClipboardCheck },
   { name: "Reporting", href: "/admin/reporting", icon: BarChart3 },
   { name: "Attestations", href: "/admin/attestations", icon: Award },
+  { name: "Utilisateurs", href: "/admin/utilisateurs", icon: UserCog },
 ];
 
 interface AdminSidebarProps {
