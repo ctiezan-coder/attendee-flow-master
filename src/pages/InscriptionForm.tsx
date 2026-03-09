@@ -7,7 +7,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Calendar, MapPin, CheckCircle, Loader2, Download, QrCode, Clock, Users, Facebook, Instagram, Linkedin, Twitter, Mail, Phone, MapPinned } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  CheckCircle,
+  Loader2,
+  Download,
+  QrCode,
+  Clock,
+  Users,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Mail,
+  Phone,
+  MapPinned,
+} from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "@/hooks/use-toast";
@@ -220,7 +237,8 @@ const InscriptionForm = () => {
             onClick={() => navigate("/")}
             className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-green-100 hover:text-white transition-colors shrink-0"
           >
-            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Retour aux formations</span><span className="sm:hidden">Retour</span>
+            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Retour aux formations</span>
+            <span className="sm:hidden">Retour</span>
           </button>
         </div>
       </header>
@@ -240,7 +258,8 @@ const InscriptionForm = () => {
               <Calendar className="w-5 h-5 text-accent" />
               <span className="font-semibold text-foreground">Date :</span>{" "}
               {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
-            </p> </br>
+            </p>{" "}
+            <br />
             {formation.duree && (
               <p className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-accent" />
@@ -271,12 +290,22 @@ const InscriptionForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="nom_dirigeant">Nom du dirigeant *</Label>
-              <Input id="nom_dirigeant" value={formData.nom_dirigeant || ""} onChange={(e) => updateField("nom_dirigeant", e.target.value)} placeholder="Nom complet" />
+              <Input
+                id="nom_dirigeant"
+                value={formData.nom_dirigeant || ""}
+                onChange={(e) => updateField("nom_dirigeant", e.target.value)}
+                placeholder="Nom complet"
+              />
               <FieldError field="nom_dirigeant" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="nom_entreprise">Raison sociale *</Label>
-              <Input id="nom_entreprise" value={formData.nom_entreprise || ""} onChange={(e) => updateField("nom_entreprise", e.target.value)} placeholder="Nom de l'entreprise" />
+              <Input
+                id="nom_entreprise"
+                value={formData.nom_entreprise || ""}
+                onChange={(e) => updateField("nom_entreprise", e.target.value)}
+                placeholder="Nom de l'entreprise"
+              />
               <FieldError field="nom_entreprise" />
             </div>
           </div>
@@ -284,12 +313,24 @@ const InscriptionForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" value={formData.email || ""} onChange={(e) => updateField("email", e.target.value)} placeholder="email@exemple.com" />
+              <Input
+                id="email"
+                type="email"
+                value={formData.email || ""}
+                onChange={(e) => updateField("email", e.target.value)}
+                placeholder="email@exemple.com"
+              />
               <FieldError field="email" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="telephone">Téléphone *</Label>
-              <Input id="telephone" type="tel" value={formData.telephone || ""} onChange={(e) => updateField("telephone", e.target.value)} placeholder="+225 07 12 34 56 78" />
+              <Input
+                id="telephone"
+                type="tel"
+                value={formData.telephone || ""}
+                onChange={(e) => updateField("telephone", e.target.value)}
+                placeholder="+225 07 12 34 56 78"
+              />
               <FieldError field="telephone" />
             </div>
           </div>
@@ -314,14 +355,15 @@ const InscriptionForm = () => {
 
           <div className="space-y-2">
             <Label>Comment avez-vous entendu parler de nous ?</Label>
-            <Select
-              value={formData.source_id?.toString()}
-              onValueChange={(v) => updateField("source_id", parseInt(v))}
-            >
-              <SelectTrigger><SelectValue placeholder="Sélectionner (optionnel)" /></SelectTrigger>
+            <Select value={formData.source_id?.toString()} onValueChange={(v) => updateField("source_id", parseInt(v))}>
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner (optionnel)" />
+              </SelectTrigger>
               <SelectContent>
                 {sources?.map((s) => (
-                  <SelectItem key={s.id} value={s.id.toString()}>{s.nom}</SelectItem>
+                  <SelectItem key={s.id} value={s.id.toString()}>
+                    {s.nom}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -350,16 +392,36 @@ const InscriptionFooter = () => (
         <img src={ciExportLogo} alt="Agence CI Export" className="h-14 object-contain" />
         <p className="text-sm text-zinc-400">Agence Côte d'Ivoire Export</p>
         <div className="flex gap-3 pt-2">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
+          >
             <Facebook className="w-4 h-4 text-white" />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
+          >
             <Instagram className="w-4 h-4 text-white" />
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
+          >
             <Twitter className="w-4 h-4 text-white" />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors">
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
+          >
             <Linkedin className="w-4 h-4 text-white" />
           </a>
         </div>
@@ -384,23 +446,45 @@ const InscriptionFooter = () => (
       <div className="space-y-4">
         <h3 className="text-white font-semibold text-lg">Navigation</h3>
         <ul className="space-y-2 text-sm">
-          <li><a href="/" className="hover:text-orange-400 transition-colors">Accueil</a></li>
-          <li><a href="#" className="hover:text-orange-400 transition-colors">A propos</a></li>
-          <li><a href="#" className="hover:text-orange-400 transition-colors">Offres de services</a></li>
-          <li><a href="#" className="hover:text-orange-400 transition-colors">Programmes</a></li>
+          <li>
+            <a href="/" className="hover:text-orange-400 transition-colors">
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-orange-400 transition-colors">
+              A propos
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-orange-400 transition-colors">
+              Offres de services
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-orange-400 transition-colors">
+              Programmes
+            </a>
+          </li>
         </ul>
       </div>
       <div className="space-y-4">
         <h3 className="text-white font-semibold text-lg">Newsletter</h3>
-        <p className="text-sm text-zinc-400">Inscrivez-vous à notre newsletter pour recevoir les dernières actualités.</p>
+        <p className="text-sm text-zinc-400">
+          Inscrivez-vous à notre newsletter pour recevoir les dernières actualités.
+        </p>
       </div>
     </div>
     <div className="border-t border-zinc-800">
       <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-2">
         <span>© Copyright 2025 Agence Côte d'Ivoire Export</span>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-zinc-300 transition-colors">Politique de confidentialité</a>
-          <a href="#" className="hover:text-zinc-300 transition-colors">Cookies</a>
+          <a href="#" className="hover:text-zinc-300 transition-colors">
+            Politique de confidentialité
+          </a>
+          <a href="#" className="hover:text-zinc-300 transition-colors">
+            Cookies
+          </a>
         </div>
       </div>
     </div>
