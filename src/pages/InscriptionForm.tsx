@@ -85,6 +85,19 @@ const InscriptionForm = () => {
     },
   });
 
+  const { data: customFields } = useQuery({
+    queryKey: ["custom-fields-public"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("custom_fields")
+        .select("*")
+        .eq("active", true)
+        .order("position", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const mutation = useMutation({
     mutationFn: async (data: InscriptionData) => {
       const { error } = await supabase.rpc("inscrire_participant", {
