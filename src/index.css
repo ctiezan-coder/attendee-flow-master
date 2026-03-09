@@ -56,6 +56,11 @@
     --chart-3: 142 71% 45%;
     --chart-4: 217 91% 60%;
     --chart-5: 0 84% 60%;
+
+    /* Corporate shadows & effects */
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.04), 0 1px 2px -1px hsl(222 47% 11% / 0.04);
+    --shadow-card-hover: 0 10px 25px -5px hsl(222 47% 11% / 0.08), 0 8px 10px -6px hsl(222 47% 11% / 0.04);
+    --shadow-elevated: 0 20px 40px -12px hsl(222 47% 11% / 0.12);
   }
 
   .dark {
@@ -94,44 +99,111 @@
     @apply border-border;
   }
   body {
-    font-family: Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    letter-spacing: -0.01em;
     @apply bg-background text-foreground antialiased;
   }
   h1 {
-    @apply text-3xl font-bold;
+    @apply text-2xl sm:text-3xl font-bold tracking-tight;
   }
   h2 {
-    @apply text-2xl font-semibold;
+    @apply text-xl sm:text-2xl font-semibold tracking-tight;
   }
   h3 {
-    @apply text-xl font-semibold;
+    @apply text-lg sm:text-xl font-semibold tracking-tight;
   }
   p, li, span, td, th, label, a {
-    @apply text-lg;
+    @apply text-base leading-relaxed;
   }
   input, select, textarea {
-    @apply text-lg;
+    @apply text-base;
   }
   button {
-    @apply text-lg;
+    @apply text-base;
   }
   table {
-    @apply text-lg;
+    @apply text-base;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
+    @apply bg-card/80 backdrop-blur-md border border-border/40 shadow-sm;
   }
+
   .stat-card {
-    @apply bg-card rounded-xl border border-border/50 p-6 shadow-sm transition-shadow hover:shadow-md;
+    @apply bg-card rounded-xl border border-border/40 p-6 transition-all duration-300 ease-out;
+    box-shadow: var(--shadow-card);
   }
+  .stat-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+  }
+
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors text-base font-medium;
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/80 transition-all duration-200 text-sm font-medium;
   }
   .sidebar-link-active {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebar-accent text-sidebar-primary transition-colors text-base font-medium;
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebar-accent text-sidebar-primary transition-all duration-200 text-sm font-semibold;
+    box-shadow: inset 3px 0 0 hsl(var(--sidebar-primary));
+  }
+
+  /* Fade-in animation for page content */
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* Staggered children animation */
+  .stagger-children > * {
+    animation: fadeIn 0.4s ease-out backwards;
+  }
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+  .stagger-children > *:nth-child(n+7) { animation-delay: 350ms; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
