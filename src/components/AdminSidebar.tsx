@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   X,
+  UserCog,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import vdeLogo from "@/assets/vde-logo.png";
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Émargement", href: "/admin/emargement", icon: ClipboardCheck },
   { name: "Reporting", href: "/admin/reporting", icon: BarChart3 },
   { name: "Attestations", href: "/admin/attestations", icon: Award },
+  { name: "Utilisateurs", href: "/admin/utilisateurs", icon: UserCog },
 ];
 
 interface AdminSidebarProps {

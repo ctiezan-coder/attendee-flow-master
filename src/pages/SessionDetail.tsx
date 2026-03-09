@@ -1,13 +1,28 @@
 import AdminLayout from "@/components/AdminLayout";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { useParams, useNavigate } from "react-router-dom";
-import { Calendar, MapPin, Users, Clock, ArrowLeft, Link as LinkIcon, Loader2, User } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, ArrowLeft, Link as LinkIcon, Loader2, User, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import EditSessionDialog from "@/components/EditSessionDialog";
+import { toast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+const SUPERADMIN_EMAILS = ["t.coulibaly@cotedivoirexport.ci", "h.cisse@cotedivoirexport.ci"];
 
 const statusColors: Record<string, string> = {
   "A venir": "bg-info/10 text-info",
@@ -19,6 +34,25 @@ const statusColors: Record<string, string> = {
 const SessionDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const isSuperAdmin = user?.email ? SUPERADMIN_EMAILS.includes(user.email) : false;
+
+  const deleteFormation = useMutation({
+    mutationFn: async () => {
+      await supabase.from("inscriptions").delete().eq("formation_id", id!);
+      const { error } = await supabase.from("formations").delete().eq("id", id!);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-formations"] });
+      toast({ title: "Formation supprimée" });
+      navigate("/admin/sessions");
+    },
+    onError: () => {
+      toast({ title: "Erreur lors de la suppression", variant: "destructive" });
+    },
+  });
 
   const { data: formation, isLoading } = useQuery({
     queryKey: ["formation-detail", id],
@@ -65,18 +99,46 @@ const SessionDetail = () => {
         >
           <ArrowLeft className="w-4 h-4" /> Retour
         </button>
-        <EditSessionDialog formation={{
-          id: formation.id,
-          titre: formation.titre,
-          theme: formation.theme,
-          date_debut: formation.date_debut,
-          duree: formation.duree,
-          lieu: formation.lieu,
-          formateur: formation.formateur,
-          places: formation.places,
-          statut: formation.statut,
-          image_url: (formation as any).image_url,
-        }} />
+        <div className="flex items-center gap-2">
+          {isSuperAdmin && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" size="sm" className="text-destructive border-destructive/30 hover:bg-destructive/10">
+                  <Trash2 className="w-4 h-4 mr-1" /> Supprimer
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Supprimer cette formation ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    « {formation.titre} » sera définitivement supprimée avec toutes ses inscriptions.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => deleteFormation.mutate()}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+          <EditSessionDialog formation={{
+            id: formation.id,
+            titre: formation.titre,
+            theme: formation.theme,
+            date_debut: formation.date_debut,
+            duree: formation.duree,
+            lieu: formation.lieu,
+            formateur: formation.formateur,
+            places: formation.places,
+            statut: formation.statut,
+            image_url: (formation as any).image_url,
+          }} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

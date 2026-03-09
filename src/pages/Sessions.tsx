@@ -1,13 +1,27 @@
 import AdminLayout from "@/components/AdminLayout";
 import CreateSessionDialog from "@/components/CreateSessionDialog";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Filter, Calendar, MapPin, Users, Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Filter, Calendar, MapPin, Users, Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 type FormationStatut = "A venir" | "En cours" | "Terminée" | "Annulée" | "all";
 
@@ -26,9 +40,14 @@ const statusColors: Record<string, string> = {
   "Annulée": "bg-destructive/10 text-destructive",
 };
 
+const SUPERADMIN_EMAILS = ["t.coulibaly@cotedivoirexport.ci", "h.cisse@cotedivoirexport.ci"];
+
 const Sessions = () => {
   const [filter, setFilter] = useState<FormationStatut>("all");
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const isSuperAdmin = user?.email ? SUPERADMIN_EMAILS.includes(user.email) : false;
 
   const { data: formations, isLoading } = useQuery({
     queryKey: ["admin-formations"],
@@ -39,6 +58,22 @@ const Sessions = () => {
         .order("date_debut", { ascending: false });
       if (error) throw error;
       return data;
+    },
+  });
+
+  const deleteFormation = useMutation({
+    mutationFn: async (id: string) => {
+      // Delete related inscriptions first
+      await supabase.from("inscriptions").delete().eq("formation_id", id);
+      const { error } = await supabase.from("formations").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-formations"] });
+      toast({ title: "Formation supprimée avec succès" });
+    },
+    onError: () => {
+      toast({ title: "Erreur lors de la suppression", variant: "destructive" });
     },
   });
 
@@ -92,9 +127,42 @@ const Sessions = () => {
                   <span className="text-xs font-medium text-accent uppercase tracking-wide">
                     {formation.theme}
                   </span>
-                  <Badge variant="secondary" className={`${statusColors[formation.statut] || ""} border-0 font-medium text-xs`}>
-                    {formation.statut}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    {isSuperAdmin && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-destructive hover:text-destructive"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Supprimer cette formation ?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              « {formation.titre} » sera définitivement supprimée avec toutes ses inscriptions.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteFormation.mutate(formation.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Supprimer
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                    <Badge variant="secondary" className={`${statusColors[formation.statut] || ""} border-0 font-medium text-xs`}>
+                      {formation.statut}
+                    </Badge>
+                  </div>
                 </div>
                 <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
                   {formation.titre}

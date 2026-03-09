@@ -15,6 +15,7 @@ import Emargement from "./pages/Emargement";
 import Reporting from "./pages/Reporting";
 import Attestations from "./pages/Attestations";
 import Settings from "./pages/Settings";
+import UsersManagement from "./pages/UsersManagement";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/admin/reporting" element={<ProtectedRoute><Reporting /></ProtectedRoute>} />
             <Route path="/admin/attestations" element={<ProtectedRoute><Attestations /></ProtectedRoute>} />
             <Route path="/admin/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/admin/utilisateurs" element={<ProtectedRoute><UsersManagement /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
