@@ -11,21 +11,20 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const dbUrl = Deno.env.get('EXTERNAL_DB_URL');
-  if (!dbUrl) {
+  const dbPassword = Deno.env.get('EXTERNAL_DB_URL');
+  if (!dbPassword) {
     return new Response(JSON.stringify({ error: 'EXTERNAL_DB_URL not configured' }), {
       status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  // Build proper connection string if not already a URL
-  let connectionString = dbUrl;
-  if (!dbUrl.startsWith('postgresql://') && !dbUrl.startsWith('postgres://')) {
-    // Assume the secret is just the password, construct the full URL
-    connectionString = `postgresql://agencexp_onufemmes_user:${dbUrl}@91.204.209.25:5432/agencexp_onufemmes`;
-  }
-
-  const pool = new Pool(connectionString, 1);
+  const pool = new Pool({
+    hostname: "91.204.209.25",
+    port: 5432,
+    database: "agencexp_onufemmes",
+    user: "agencexp_onufemmes_user",
+    password: dbPassword,
+  }, 1);
 
   try {
     const connection = await pool.connect();
