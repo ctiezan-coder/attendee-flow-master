@@ -121,6 +121,11 @@ const SessionsPublic = () => {
 
               return (
                 <div key={formation.id} className="stat-card flex flex-col md:flex-row md:items-center gap-4">
+                  {formation.image_url && (
+                    <div className="shrink-0 w-full md:w-40 h-32 md:h-28 rounded-lg overflow-hidden">
+                      <img src={formation.image_url} alt={formation.titre} className="w-full h-full object-cover" />
+                    </div>
+                  )}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Badge variant="outline" className="text-xs font-medium text-accent border-accent/30">

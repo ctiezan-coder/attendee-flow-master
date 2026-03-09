@@ -228,6 +228,11 @@ const InscriptionForm = () => {
       {/* Content full-width */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
         <div className="stat-card mb-6">
+          {formation.image_url && (
+            <div className="w-full h-48 md:h-64 rounded-lg overflow-hidden mb-4">
+              <img src={formation.image_url} alt={formation.titre} className="w-full h-full object-cover" />
+            </div>
+          )}
           <span className="text-xs font-medium text-accent uppercase tracking-wide">{formation.theme}</span>
           <h1 className="text-2xl font-bold text-foreground mt-2">{formation.titre}</h1>
           <div className="mt-4 space-y-2 text-lg text-muted-foreground">
