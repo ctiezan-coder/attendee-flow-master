@@ -16,6 +16,7 @@ import {
   Mail,
   Phone,
   MapPinned,
+  GraduationCap,
 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -48,33 +49,42 @@ const SessionsPublic = () => {
   });
 
   const themes = formations ? [...new Set(formations.map((f) => f.theme))].sort() : [];
-
   const filtered = selectedTheme ? formations?.filter((f) => f.theme === selectedTheme) : formations;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border bg-green-700">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
-          <div>
-            <h1 className="text-lg sm:text-2xl font-bold text-white">NOS FORMATION DISPONIBLES</h1>
-            <p className="text-green-100 text-xs sm:text-sm mt-0.5">Choisissez une formation puis inscrivez-vous</p>
+      {/* Hero Header */}
+      <header className="relative bg-gradient-to-br from-green-800 via-green-700 to-green-600 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDJ2LTJoMzR6bTAtMzBWMkgydjJoMzR6TTIgMGgzNnYySDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 relative">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <GraduationCap className="w-5 h-5 text-white" />
+            </div>
           </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Nos formations disponibles
+          </h1>
+          <p className="text-green-100/80 text-sm sm:text-base mt-2 max-w-lg">
+            Découvrez nos programmes de renforcement des capacités et inscrivez-vous en ligne.
+          </p>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8 flex-1 w-full w-full">
+      <main className="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+        {/* Theme filters */}
         {themes.length > 1 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-              <Filter className="w-4 h-4" />
-              <span>Filtrer par thème :</span>
+          <div className="mb-8 animate-fade-in">
+            <div className="flex items-center gap-2 mb-3 text-xs text-muted-foreground font-medium uppercase tracking-wide">
+              <Filter className="w-3.5 h-3.5" />
+              <span>Filtrer par thème</span>
             </div>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedTheme(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
                   !selectedTheme
-                    ? "bg-accent text-accent-foreground border-accent"
+                    ? "bg-accent text-accent-foreground border-accent shadow-sm"
                     : "bg-card text-muted-foreground border-border hover:border-accent/50 hover:text-foreground"
                 }`}
               >
@@ -84,9 +94,9 @@ const SessionsPublic = () => {
                 <button
                   key={th}
                   onClick={() => setSelectedTheme(th)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
                     selectedTheme === th
-                      ? "bg-accent text-accent-foreground border-accent"
+                      ? "bg-accent text-accent-foreground border-accent shadow-sm"
                       : "bg-card text-muted-foreground border-border hover:border-accent/50 hover:text-foreground"
                   }`}
                 >
@@ -104,26 +114,28 @@ const SessionsPublic = () => {
             ))}
           </div>
         ) : !filtered?.length ? (
-          <div className="stat-card text-center py-16">
-            <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-foreground">Aucune formation disponible</h2>
+          <div className="stat-card text-center py-16 animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-7 h-7 text-muted-foreground/40" />
+            </div>
+            <h2 className="text-base font-semibold text-foreground">Aucune formation disponible</h2>
             <p className="text-muted-foreground text-sm mt-1">
               Revenez bientôt pour découvrir nos prochaines formations.
             </p>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-4 stagger-children">
             {filtered.map((formation) => {
               const inscrits = (formation.inscriptions as any)?.[0]?.count ?? 0;
               const placesRestantes = formation.places - inscrits;
 
               return (
-                <div key={formation.id} className="stat-card flex flex-col md:flex-row md:items-start gap-4 py-6">
+                <div key={formation.id} className="stat-card flex flex-col md:flex-row md:items-start gap-5 py-6">
                   {formation.image_url && (
                     <button
                       type="button"
                       onClick={() => setPreviewImage({ url: formation.image_url!, titre: formation.titre })}
-                      className="shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-lg overflow-hidden border border-border bg-muted flex items-center justify-center cursor-zoom-in hover:ring-2 hover:ring-accent transition-shadow"
+                      className="shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border border-border/40 bg-muted flex items-center justify-center cursor-zoom-in hover:ring-2 hover:ring-accent/50 transition-all duration-200"
                     >
                       <img
                         src={formation.image_url}
@@ -132,69 +144,66 @@ const SessionsPublic = () => {
                       />
                     </button>
                   )}
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant="outline" className="text-xs font-medium text-accent border-accent/30">
+                      <Badge variant="outline" className="text-[10px] font-semibold text-accent border-accent/30 uppercase tracking-wider">
                         {formation.theme}
                       </Badge>
                       {formation.statut === "En cours" && (
-                        <Badge variant="secondary" className="text-xs bg-accent/10 text-accent border-0">
+                        <Badge variant="secondary" className="text-[10px] bg-accent/10 text-accent border-0">
                           En cours
                         </Badge>
                       )}
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">{formation.titre}</h3>
+                    <h3 className="text-base sm:text-lg font-bold text-foreground leading-snug">{formation.titre}</h3>
                     <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1.5">
-                        Thème : <strong className="text-foreground">{formation.theme}</strong>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        Date :
-                        <Calendar className="w-3.5 h-3.5" />
+                      <span className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-accent shrink-0" />
+                        <span className="font-medium text-foreground">Date :</span>
                         {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
                       </span>
                       {formation.duree && (
-                        <span className="flex items-center gap-1.5">
-                          Heure :
-                          <Clock className="w-3.5 h-3.5" />
+                        <span className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-accent shrink-0" />
+                          <span className="font-medium text-foreground">Durée :</span>
                           {formation.duree}
                         </span>
                       )}
                       {formation.lieu && (
-                        <span className="flex items-center gap-1.5">
-                          Lieu de Formation :
-                          <MapPin className="w-3.5 h-3.5" />
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-accent shrink-0" />
+                          <span className="font-medium text-foreground">Lieu :</span>
                           {formation.lieu}
                         </span>
                       )}
-                      <span className="flex items-center gap-1.5">
-                        Participant (e) :
-                        <Users className="w-3.5 h-3.5" />
-                        {placesRestantes > 0 ? `${placesRestantes} places restantes` : "Complet"}
+                      <span className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-accent shrink-0" />
+                        <span className="font-medium text-foreground">Places :</span>
+                        {placesRestantes > 0 ? `${placesRestantes} restantes` : "Complet"}
                       </span>
                     </div>
                   </div>
-                  <div className="shrink-0 flex items-center gap-2">
+                  <div className="shrink-0 flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-stretch gap-2">
                     <Button
                       variant="outline"
-                      size="icon"
+                      size="sm"
                       onClick={() => setQrFormation({ id: formation.id, titre: formation.titre })}
-                      title="QR code d'inscription"
+                      className="gap-2 text-xs"
                     >
-                      <QrCode className="w-4 h-4" />
+                      <QrCode className="w-3.5 h-3.5" /> QR Code
                     </Button>
                     {(() => {
                       const deadline = new Date(formation.date_debut);
                       deadline.setDate(deadline.getDate() - 1);
                       const isClosed = new Date() >= deadline;
                       if (isClosed) {
-                        return <Button disabled variant="secondary">Inscriptions fermées</Button>;
+                        return <Button disabled variant="secondary" size="sm" className="text-xs">Fermée</Button>;
                       }
                       if (placesRestantes <= 0) {
-                        return <Button disabled variant="secondary">Complet</Button>;
+                        return <Button disabled variant="secondary" size="sm" className="text-xs">Complet</Button>;
                       }
                       return (
-                        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+                        <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 text-xs">
                           <Link to={`/inscription/${formation.id}`}>S'inscrire</Link>
                         </Button>
                       );
@@ -207,14 +216,15 @@ const SessionsPublic = () => {
         )}
       </main>
 
+      {/* QR Dialog */}
       <Dialog open={!!qrFormation} onOpenChange={() => setQrFormation(null)}>
         <DialogContent className="max-w-sm text-center">
           <DialogHeader>
-            <DialogTitle className="text-center">Scanner pour s'inscrire</DialogTitle>
+            <DialogTitle className="text-center text-base">Scanner pour s'inscrire</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground mb-4">{qrFormation?.titre}</p>
           <div className="flex justify-center">
-            <div className="bg-background rounded-xl p-6 border border-border inline-block">
+            <div className="bg-background rounded-xl p-6 border border-border/40 inline-block">
               <QRCodeSVG
                 value={`${BASE_URL}/inscription/${qrFormation?.id}`}
                 size={200}
@@ -226,16 +236,16 @@ const SessionsPublic = () => {
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            Scannez ce QR code avec votre téléphone pour accéder au formulaire d'inscription
+            Scannez ce QR code pour accéder au formulaire d'inscription
           </p>
         </DialogContent>
       </Dialog>
 
-      {/* Image preview dialog */}
+      {/* Image preview */}
       <Dialog open={!!previewImage} onOpenChange={() => setPreviewImage(null)}>
         <DialogContent className="max-w-3xl p-2 sm:p-4">
           <DialogHeader>
-            <DialogTitle className="text-center">{previewImage?.titre}</DialogTitle>
+            <DialogTitle className="text-center text-base">{previewImage?.titre}</DialogTitle>
           </DialogHeader>
           <div className="flex justify-center">
             <img
@@ -248,133 +258,86 @@ const SessionsPublic = () => {
       </Dialog>
 
       {/* Footer */}
-      <footer className="bg-zinc-900 text-zinc-300 mt-16">
+      <footer className="bg-foreground text-muted mt-auto">
         <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Col 1: Logo + Réseaux sociaux */}
           <div className="space-y-4">
-            <img src={ciExportLogo} alt="Agence CI Export" className="h-14 object-contain" />
-            <p className="text-sm text-zinc-400">Agence Côte d'Ivoire Export</p>
-            <div className="flex gap-3 pt-2">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
-              >
-                <Facebook className="w-4 h-4 text-white" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
-              >
-                <Instagram className="w-4 h-4 text-white" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
-              >
-                <Twitter className="w-4 h-4 text-white" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:bg-orange-600 transition-colors"
-              >
-                <Linkedin className="w-4 h-4 text-white" />
-              </a>
+            <img src={ciExportLogo} alt="Agence CI Export" className="h-12 object-contain" />
+            <p className="text-sm text-primary-foreground/60">Agence Côte d'Ivoire Export</p>
+            <div className="flex gap-2 pt-2">
+              {[
+                { icon: Facebook, href: "https://facebook.com" },
+                { icon: Instagram, href: "https://instagram.com" },
+                { icon: Twitter, href: "https://twitter.com" },
+                { icon: Linkedin, href: "https://linkedin.com" },
+              ].map(({ icon: Icon, href }) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-lg bg-accent/90 flex items-center justify-center hover:bg-accent transition-colors"
+                >
+                  <Icon className="w-3.5 h-3.5 text-accent-foreground" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Col 2: Coordonnées */}
           <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Coordonnées</h3>
-            <div className="space-y-3 text-sm">
+            <h3 className="text-primary-foreground font-semibold text-sm uppercase tracking-wide">Coordonnées</h3>
+            <div className="space-y-3 text-sm text-primary-foreground/60">
               <div className="flex items-start gap-2">
-                <MapPinned className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+                <MapPinned className="w-4 h-4 text-accent mt-0.5 shrink-0" />
                 <span>Immeuble CGRAE, Adjamé-Indénié, Abidjan</span>
               </div>
               <div className="flex items-start gap-2">
-                <Phone className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
-                <span>+225 27 20 28 67 53 / +225 07 67 22 99 36</span>
+                <Phone className="w-4 h-4 text-accent mt-0.5 shrink-0" />
+                <span>+225 27 20 28 67 53</span>
               </div>
               <div className="flex items-start gap-2">
-                <Mail className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+                <Mail className="w-4 h-4 text-accent mt-0.5 shrink-0" />
                 <span>info@cotedivoirexport.ci</span>
               </div>
             </div>
           </div>
 
-          {/* Col 3: Navigation */}
           <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Navigation</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  Accueil
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  A propos
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  Atouts de la Côte d'Ivoire
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  Offres de services
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  Programmes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-orange-400 transition-colors">
-                  Ressources
-                </a>
-              </li>
+            <h3 className="text-primary-foreground font-semibold text-sm uppercase tracking-wide">Navigation</h3>
+            <ul className="space-y-2 text-sm text-primary-foreground/60">
+              {["Accueil", "A propos", "Offres de services", "Programmes", "Ressources"].map((item) => (
+                <li key={item}>
+                  <a href="#" className="hover:text-accent transition-colors">{item}</a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Col 4: Newsletter */}
           <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Newsletter</h3>
-            <p className="text-sm text-zinc-400">
-              Inscrivez-vous à notre newsletter pour recevoir les dernières actualités.
+            <h3 className="text-primary-foreground font-semibold text-sm uppercase tracking-wide">Newsletter</h3>
+            <p className="text-sm text-primary-foreground/60">
+              Recevez les dernières actualités.
             </p>
             <div className="flex gap-2">
               <Input
                 placeholder="Votre email"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-primary-foreground/5 border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm h-9"
               />
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white shrink-0">S'inscrire</Button>
+              <Button size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground shrink-0 h-9">
+                OK
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* Copyright bar */}
-        <div className="border-t border-zinc-800">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-2">
-            <span>© Copyright 2025 Agence Côte d'Ivoire Export</span>
+        <div className="border-t border-primary-foreground/10">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-primary-foreground/40 gap-2">
+            <span>© 2025 Agence Côte d'Ivoire Export</span>
             <div className="flex gap-4">
-              <Link to="/login" className="hover:text-zinc-300 transition-colors">
+              <Link to="/login" className="hover:text-primary-foreground/70 transition-colors">
                 Espace admin
               </Link>
-              <a href="#" className="hover:text-zinc-300 transition-colors">
-                Politique de confidentialité
-              </a>
-              <a href="#" className="hover:text-zinc-300 transition-colors">
-                Cookies
+              <a href="#" className="hover:text-primary-foreground/70 transition-colors">
+                Confidentialité
               </a>
             </div>
           </div>

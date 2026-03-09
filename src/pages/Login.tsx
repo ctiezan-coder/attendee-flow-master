@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, LogIn, UserPlus, ShieldCheck, ArrowLeft } from "lucide-react";
+import { Loader2, LogIn, UserPlus, ShieldCheck, ArrowLeft, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import ciExportLogo from "@/assets/ci-export-logo.png";
@@ -127,27 +127,25 @@ const Login = () => {
   if (otpMode) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm animate-scale-in">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="w-7 h-7 text-accent" />
+            <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="w-8 h-8 text-accent" />
             </div>
-            <h1 className="text-xl font-semibold text-foreground">Vérification par email</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h1 className="text-xl font-bold text-foreground tracking-tight">Vérification par email</h1>
+            <p className="text-sm text-muted-foreground mt-2">
               Un code à 6 chiffres a été envoyé à
             </p>
-            <p className="text-sm font-medium text-foreground">{pendingEmail}</p>
+            <p className="text-sm font-semibold text-foreground">{pendingEmail}</p>
           </div>
 
           <form onSubmit={handleVerifyOtp} className="stat-card space-y-6">
             <div className="space-y-3">
-              <Label className="text-center block">Code de vérification</Label>
+              <Label className="text-center block text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Code de vérification
+              </Label>
               <div className="flex justify-center">
-                <InputOTP
-                  maxLength={6}
-                  value={otpCode}
-                  onChange={setOtpCode}
-                >
+                <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode}>
                   <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
@@ -174,21 +172,17 @@ const Login = () => {
                 type="button"
                 onClick={handleResendOtp}
                 disabled={loading}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 Renvoyer le code
               </button>
               <br />
               <button
                 type="button"
-                onClick={() => {
-                  setOtpMode(false);
-                  setOtpCode("");
-                  setMode("signup");
-                }}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
+                onClick={() => { setOtpMode(false); setOtpCode(""); setMode("signup"); }}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mx-auto"
               >
-                <ArrowLeft className="w-3.5 h-3.5" /> Retour
+                <ArrowLeft className="w-3 h-3" /> Retour
               </button>
             </div>
           </form>
@@ -199,22 +193,24 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm animate-scale-in">
         <div className="text-center mb-8">
-          <img src={ciExportLogo} alt="Agence CI Export" className="w-24 h-24 rounded-xl mx-auto mb-4 object-contain" />
-          <h1 className="text-xl font-semibold text-foreground">FORMATION PLATEFORME</h1>
+          <div className="w-20 h-20 rounded-2xl mx-auto mb-4 overflow-hidden border border-border/40 shadow-sm">
+            <img src={ciExportLogo} alt="Agence CI Export" className="w-full h-full object-contain p-2" />
+          </div>
+          <h1 className="text-xl font-bold text-foreground tracking-tight">FORMATION PLATEFORME</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {forgotMode
-              ? "Entrez votre email pour recevoir un lien de réinitialisation"
+              ? "Réinitialisation du mot de passe"
               : mode === "login"
-                ? "Connectez-vous pour accéder au back-office"
+                ? "Connectez-vous au back-office"
                 : "Créez votre compte administrateur"}
           </p>
         </div>
 
         <form onSubmit={forgotMode ? handleForgotPassword : mode === "login" ? handleLogin : handleSignup} className="stat-card space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-xs font-medium">Email</Label>
             <Input
               id="email"
               type="email"
@@ -222,11 +218,12 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@cotedivoirexport.ci"
               required
+              className="h-10"
             />
           </div>
           {!forgotMode && (
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password" className="text-xs font-medium">Mot de passe</Label>
               <Input
                 id="password"
                 type="password"
@@ -234,11 +231,18 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                className="h-10"
               />
             </div>
           )}
-          <Button type="submit" disabled={loading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : mode === "login" ? <LogIn className="w-4 h-4 mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
+          <Button type="submit" disabled={loading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-10">
+            {loading ? (
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            ) : mode === "login" ? (
+              <LogIn className="w-4 h-4 mr-2" />
+            ) : (
+              <UserPlus className="w-4 h-4 mr-2" />
+            )}
             {forgotMode ? "Envoyer le lien" : mode === "login" ? "Se connecter" : "Créer le compte"}
           </Button>
 
@@ -246,7 +250,7 @@ const Login = () => {
             <button
               type="button"
               onClick={() => setForgotMode(true)}
-              className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               Mot de passe oublié ?
             </button>
@@ -255,11 +259,15 @@ const Login = () => {
           <button
             type="button"
             onClick={() => { setForgotMode(false); setMode(mode === "login" ? "signup" : "login"); }}
-            className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             {forgotMode ? "Retour à la connexion" : mode === "login" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
           </button>
         </form>
+
+        <p className="text-center text-[10px] text-muted-foreground/50 mt-6 flex items-center justify-center gap-1">
+          <Lock className="w-3 h-3" /> Connexion sécurisée
+        </p>
       </div>
     </div>
   );
