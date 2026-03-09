@@ -240,7 +240,7 @@ const InscriptionForm = () => {
               <Calendar className="w-5 h-5 text-accent" />
               <span className="font-semibold text-foreground">Date :</span>{" "}
               {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
-            </p>
+            </p> </br>
             {formation.duree && (
               <p className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-accent" />
