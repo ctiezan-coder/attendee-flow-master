@@ -120,13 +120,17 @@ const SessionsPublic = () => {
               return (
                 <div key={formation.id} className="stat-card flex flex-col md:flex-row md:items-start gap-4 py-6">
                   {formation.image_url && (
-                    <div className="shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-lg overflow-hidden border border-border bg-muted flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewImage({ url: formation.image_url!, titre: formation.titre })}
+                      className="shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-lg overflow-hidden border border-border bg-muted flex items-center justify-center cursor-zoom-in hover:ring-2 hover:ring-accent transition-shadow"
+                    >
                       <img
                         src={formation.image_url}
                         alt={formation.titre}
                         className="max-w-full max-h-full object-contain"
                       />
-                    </div>
+                    </button>
                   )}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
