@@ -382,6 +382,7 @@ export type Database = {
         Returns: undefined
       }
       is_active_admin: { Args: { check_email: string }; Returns: boolean }
+      is_superadmin: { Args: { check_email: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
