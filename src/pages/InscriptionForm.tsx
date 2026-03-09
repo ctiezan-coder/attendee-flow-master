@@ -111,6 +111,22 @@ const InscriptionForm = () => {
       });
       if (error) throw error;
 
+      // Save custom field values
+      if (customFields && customFields.length > 0) {
+        const valuesToInsert = customFields
+          .filter((f) => customValues[f.id] !== undefined && customValues[f.id] !== "")
+          .map((f) => ({
+            custom_field_id: f.id,
+            formation_id: formationId!,
+            participant_email: data.email,
+            value: customValues[f.id],
+          }));
+        if (valuesToInsert.length > 0) {
+          const { error: valError } = await supabase.from("custom_field_values").insert(valuesToInsert);
+          if (valError) console.error("Custom field values error:", valError);
+        }
+      }
+
       const qrCode = `${window.location.origin}/inscription/${formationId}`;
       return { qrCode, nom: data.nom_dirigeant };
     },
@@ -149,6 +165,19 @@ const InscriptionForm = () => {
       });
       setErrors(fieldErrors);
       return;
+    }
+    // Validate required custom fields
+    if (customFields) {
+      const customErrors: Record<string, string> = {};
+      for (const f of customFields) {
+        if (f.required && (!customValues[f.id] || customValues[f.id].trim() === "")) {
+          customErrors[`custom_${f.id}`] = "Ce champ est requis";
+        }
+      }
+      if (Object.keys(customErrors).length > 0) {
+        setErrors((prev) => ({ ...prev, ...customErrors }));
+        return;
+      }
     }
     mutation.mutate(result.data);
   };
