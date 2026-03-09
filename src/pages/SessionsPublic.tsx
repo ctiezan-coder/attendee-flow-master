@@ -346,6 +346,9 @@ const SessionsPublic = () => {
           <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-2">
             <span>© Copyright 2025 Agence Côte d'Ivoire Export</span>
             <div className="flex gap-4">
+              <Link to="/login" className="hover:text-zinc-300 transition-colors">
+                Espace admin
+              </Link>
               <a href="#" className="hover:text-zinc-300 transition-colors">
                 Politique de confidentialité
               </a>
