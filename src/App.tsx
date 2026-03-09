@@ -15,6 +15,7 @@ import Emargement from "./pages/Emargement";
 import Reporting from "./pages/Reporting";
 import Attestations from "./pages/Attestations";
 import Settings from "./pages/Settings";
+import UsersManagement from "./pages/UsersManagement";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
