@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   X,
+  UserCog,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import vdeLogo from "@/assets/vde-logo.png";
