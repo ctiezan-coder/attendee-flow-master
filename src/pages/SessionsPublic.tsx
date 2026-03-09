@@ -55,7 +55,7 @@ const SessionsPublic = () => {
       <header className="border-b border-border bg-green-700">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between gap-3">
           <div>
-            <h1 className="text-lg sm:text-2xl font-bold text-white">FORMATION PLATEFORME</h1>
+            <h1 className="text-lg sm:text-2xl font-bold text-white">NOS FORMATION DISPONIBLES</h1>
             <p className="text-green-100 text-xs sm:text-sm mt-0.5">Choisissez une formation puis inscrivez-vous</p>
           </div>
           <Link to="/login" className="text-xs sm:text-sm text-green-100 hover:text-white transition-colors shrink-0">
