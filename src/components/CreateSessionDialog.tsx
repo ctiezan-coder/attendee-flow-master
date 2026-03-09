@@ -211,6 +211,9 @@ const CreateSessionDialog = () => {
             <Input type="number" min={1} value={form.places} onChange={(e) => update("places", parseInt(e.target.value) || 30)} />
           </div>
 
+          <hr className="border-border" />
+          <CustomFieldsManager />
+
           <Button type="submit" disabled={mutation.isPending} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
             {mutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
             Créer la formation
