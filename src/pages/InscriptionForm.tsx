@@ -40,7 +40,7 @@ const InscriptionForm = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("formations")
-        .select("*")
+        .select("*, inscriptions(count)")
         .eq("id", formationId!)
         .single();
       if (error) throw error;
