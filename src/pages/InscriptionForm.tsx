@@ -56,6 +56,10 @@ const InscriptionForm = () => {
   const [formData, setFormData] = useState<Partial<InscriptionData>>({ secteur_ids: [] });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [customValues, setCustomValues] = useState<Record<string, string>>({});
+  const [autreSecteur, setAutreSecteur] = useState(false);
+  const [autreSecteurTexte, setAutreSecteurTexte] = useState("");
+  const [autreSource, setAutreSource] = useState(false);
+  const [autreSourceTexte, setAutreSourceTexte] = useState("");
 
   const { data: formation, isLoading } = useQuery({
     queryKey: ["formation", formationId],
