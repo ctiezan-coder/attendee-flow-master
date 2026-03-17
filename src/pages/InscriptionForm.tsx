@@ -104,10 +104,11 @@ const InscriptionForm = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: InscriptionData) => {
+      const nomComplet = `${data.civilite} ${data.nom} ${data.prenoms}`;
       const { error } = await supabase.rpc("inscrire_participant", {
         p_formation_id: formationId!,
         p_nom_entreprise: data.nom_entreprise,
-        p_nom_dirigeant: data.nom_dirigeant,
+        p_nom_dirigeant: `${nomComplet} — ${data.fonction}`,
         p_email: data.email,
         p_telephone: data.telephone,
         p_source_id: data.source_id || null,
