@@ -487,7 +487,19 @@ const InscriptionForm = () => {
 
           <div className="space-y-2">
             <Label>Comment avez-vous entendu parler de nous ?</Label>
-            <Select value={formData.source_id?.toString()} onValueChange={(v) => updateField("source_id", parseInt(v))}>
+            <Select
+              value={autreSource ? "autre" : (formData.source_id?.toString() || "")}
+              onValueChange={(v) => {
+                if (v === "autre") {
+                  setAutreSource(true);
+                  updateField("source_id", undefined);
+                } else {
+                  setAutreSource(false);
+                  setAutreSourceTexte("");
+                  updateField("source_id", parseInt(v));
+                }
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Sélectionner (optionnel)" />
               </SelectTrigger>
@@ -497,8 +509,17 @@ const InscriptionForm = () => {
                     {s.nom}
                   </SelectItem>
                 ))}
+                <SelectItem value="autre">Autre</SelectItem>
               </SelectContent>
             </Select>
+            {autreSource && (
+              <Input
+                value={autreSourceTexte}
+                onChange={(e) => setAutreSourceTexte(e.target.value)}
+                placeholder="À préciser..."
+                className="mt-2"
+              />
+            )}
           </div>
 
           {/* Custom fields */}
