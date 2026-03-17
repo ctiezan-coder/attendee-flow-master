@@ -463,7 +463,25 @@ const InscriptionForm = () => {
                   {s.nom}
                 </label>
               ))}
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox
+                  checked={autreSecteur}
+                  onCheckedChange={(checked) => {
+                    setAutreSecteur(!!checked);
+                    if (!checked) setAutreSecteurTexte("");
+                  }}
+                />
+                Autre
+              </label>
             </div>
+            {autreSecteur && (
+              <Input
+                value={autreSecteurTexte}
+                onChange={(e) => setAutreSecteurTexte(e.target.value)}
+                placeholder="À préciser..."
+                className="mt-2"
+              />
+            )}
             <FieldError field="secteur_ids" />
           </div>
 
