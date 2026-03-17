@@ -468,7 +468,7 @@ const InscriptionForm = () => {
                   {s.nom}
                 </label>
               ))}
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <label className="flex items-center gap-2 text-base cursor-pointer">
                 <Checkbox
                   checked={autreSecteur}
                   onCheckedChange={(checked) => {
