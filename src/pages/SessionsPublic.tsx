@@ -156,65 +156,79 @@ const SessionsPublic = () => {
               const placesRestantes = formation.places - inscrits;
 
               return (
-                <div key={formation.id} className="stat-card flex flex-col md:flex-row md:items-start gap-5 py-6">
-                  {formation.image_url && (
-                    <button
-                      type="button"
-                      onClick={() => setPreviewImage({ url: formation.image_url!, titre: formation.titre })}
-                      className="shrink-0 w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border border-border/40 bg-muted flex items-center justify-center cursor-zoom-in hover:ring-2 hover:ring-accent/50 transition-all duration-200"
-                    >
-                      <img
-                        src={formation.image_url}
-                        alt={formation.titre}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </button>
-                  )}
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant="outline" className="text-[10px] font-semibold text-accent border-accent/30 uppercase tracking-wider">
-                        {formation.theme}
-                      </Badge>
-                      {formation.statut === "En cours" && (
-                        <Badge variant="secondary" className="text-[10px] bg-accent/10 text-accent border-0">
-                          En cours
+                <div key={formation.id} className="stat-card flex flex-col gap-4 py-5 px-4 sm:px-6">
+                  <div className="flex gap-4">
+                    {formation.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => setPreviewImage({ url: formation.image_url!, titre: formation.titre })}
+                        className="shrink-0 w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border border-border/40 bg-muted flex items-center justify-center cursor-zoom-in hover:ring-2 hover:ring-accent/50 transition-all duration-200"
+                      >
+                        <img
+                          src={formation.image_url}
+                          alt={formation.titre}
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </button>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-2">
+                        <Badge variant="outline" className="text-[10px] font-semibold text-accent border-accent/30 uppercase tracking-wider">
+                          {formation.theme}
                         </Badge>
-                      )}
-                    </div>
-                    <h3 className="text-base sm:text-lg font-bold text-foreground leading-snug">{formation.titre}</h3>
-                    <div className="flex flex-col gap-1.5 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-2">
-                        <GraduationCap className="w-4 h-4 text-accent shrink-0" />
-                        <span className="font-bold text-foreground">Thème :</span>
-                        {formation.theme}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent shrink-0" />
-                        <span className="font-bold text-foreground">Date :</span>
-                        {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
-                      </span>
-                      {formation.duree && (
-                        <span className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-accent shrink-0" />
-                          <span className="font-medium text-foreground">Durée :</span>
-                          {formation.duree}
-                        </span>
-                      )}
-                      {formation.lieu && (
-                        <span className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-accent shrink-0" />
-                          <span className="font-medium text-foreground">Lieu :</span>
-                          {formation.lieu}
-                        </span>
-                      )}
-                      <span className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-accent shrink-0" />
-                        <span className="font-medium text-foreground">Places :</span>
-                        {placesRestantes > 0 ? `${placesRestantes} restantes` : "Complet"}
-                      </span>
+                        {formation.statut === "En cours" && (
+                          <Badge variant="secondary" className="text-[10px] bg-accent/10 text-accent border-0">
+                            En cours
+                          </Badge>
+                        )}
+                      </div>
+                      <h3 className="text-sm sm:text-lg font-bold text-foreground leading-snug line-clamp-3">{formation.titre}</h3>
                     </div>
                   </div>
-                  <div className="shrink-0 flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-stretch gap-2">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-start gap-2">
+                      <GraduationCap className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <span className="font-bold text-foreground">Thème : </span>
+                        <span className="break-words">{formation.theme}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Calendar className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-foreground">Date : </span>
+                        {format(new Date(formation.date_debut), "d MMMM yyyy", { locale: fr })}
+                      </div>
+                    </div>
+                    {formation.duree && (
+                      <div className="flex items-start gap-2">
+                        <Clock className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-medium text-foreground">Durée : </span>
+                          {formation.duree}
+                        </div>
+                      </div>
+                    )}
+                    {formation.lieu && (
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                        <div className="min-w-0">
+                          <span className="font-medium text-foreground">Lieu : </span>
+                          <span className="break-words">{formation.lieu}</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-start gap-2">
+                      <Users className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-medium text-foreground">Places : </span>
+                        {placesRestantes > 0 ? `${placesRestantes} restantes` : "Complet"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
                     <Button
                       variant="outline"
                       size="sm"
