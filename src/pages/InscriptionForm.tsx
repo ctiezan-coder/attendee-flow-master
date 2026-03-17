@@ -366,8 +366,8 @@ const InscriptionForm = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="stat-card space-y-6">
-          <h2 className="text-lg font-semibold text-foreground">Formulaire d'inscription</h2>
+        <form onSubmit={handleSubmit} className="stat-card space-y-8 p-8">
+          <h2 className="text-2xl font-bold text-foreground">Formulaire d'inscription</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
