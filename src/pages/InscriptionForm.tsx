@@ -557,24 +557,33 @@ const InscriptionForm = () => {
                       />
                     )}
                     {field.field_type === "select" && (
-                      <Select
-                        value={customValues[field.id] || ""}
-                        onValueChange={(v) => {
-                          setCustomValues((prev) => ({ ...prev, [field.id]: v }));
-                          setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
-                        }}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Array.isArray(field.options) && (field.options as string[]).map((opt) => (
-                            <SelectItem key={opt} value={opt}>
-                              {opt}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <>
+                        <Select
+                          value={customValues[field.id] || ""}
+                          onValueChange={(v) => {
+                            setCustomValues((prev) => ({ ...prev, [field.id]: v, [`${field.id}_preciser`]: "" }));
+                            setErrors((prev) => ({ ...prev, [`custom_${field.id}`]: "" }));
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Sélectionner" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.isArray(field.options) && (field.options as string[]).map((opt) => (
+                              <SelectItem key={opt} value={opt}>
+                                {opt}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {customValues[field.id] && /pr[ée]ciser/i.test(customValues[field.id]) && (
+                          <Input
+                            value={customValues[`${field.id}_preciser`] || ""}
+                            onChange={(e) => setCustomValues((prev) => ({ ...prev, [`${field.id}_preciser`]: e.target.value }))}
+                            placeholder="À préciser..."
+                          />
+                        )}
+                      </>
                     )}
                     {field.field_type === "checkbox" && (
                       <div className="flex items-center gap-2">
