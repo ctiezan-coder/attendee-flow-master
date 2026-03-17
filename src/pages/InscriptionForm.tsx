@@ -34,8 +34,11 @@ import { QRCodeSVG } from "qrcode.react";
 import ciExportLogo from "@/assets/ci-export-logo-blanc.png";
 
 const inscriptionSchema = z.object({
+  civilite: z.string().trim().min(1, "Requis"),
+  nom: z.string().trim().min(1, "Requis").max(255),
+  prenoms: z.string().trim().min(1, "Requis").max(255),
+  fonction: z.string().trim().min(1, "Requis").max(255),
   nom_entreprise: z.string().trim().min(1, "Requis").max(255),
-  nom_dirigeant: z.string().trim().min(1, "Requis").max(255),
   email: z.string().trim().email("Email invalide").max(255),
   telephone: z.string().trim().min(1, "Requis").max(30),
   source_id: z.number().optional(),
@@ -101,10 +104,11 @@ const InscriptionForm = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: InscriptionData) => {
+      const nomComplet = `${data.civilite} ${data.nom} ${data.prenoms}`;
       const { error } = await supabase.rpc("inscrire_participant", {
         p_formation_id: formationId!,
         p_nom_entreprise: data.nom_entreprise,
-        p_nom_dirigeant: data.nom_dirigeant,
+        p_nom_dirigeant: `${nomComplet} — ${data.fonction}`,
         p_email: data.email,
         p_telephone: data.telephone,
         p_source_id: data.source_id || null,
@@ -129,7 +133,7 @@ const InscriptionForm = () => {
       }
 
       const qrCode = `${window.location.origin}/inscription/${formationId}`;
-      return { qrCode, nom: data.nom_dirigeant };
+      return { qrCode, nom: `${data.civilite} ${data.nom} ${data.prenoms}` };
     },
     onSuccess: (result) => {
       setQrCodeValue(result.qrCode);
@@ -356,17 +360,54 @@ const InscriptionForm = () => {
         <form onSubmit={handleSubmit} className="stat-card space-y-6">
           <h2 className="text-lg font-semibold text-foreground">Formulaire d'inscription</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nom_dirigeant">Nom du dirigeant *</Label>
-              <Input
-                id="nom_dirigeant"
-                value={formData.nom_dirigeant || ""}
-                onChange={(e) => updateField("nom_dirigeant", e.target.value)}
-                placeholder="Nom complet"
-              />
-              <FieldError field="nom_dirigeant" />
+              <Label htmlFor="civilite">Civilité *</Label>
+              <Select value={formData.civilite || ""} onValueChange={(v) => updateField("civilite", v)}>
+                <SelectTrigger id="civilite">
+                  <SelectValue placeholder="Sélectionner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Monsieur">Monsieur</SelectItem>
+                  <SelectItem value="Madame">Madame</SelectItem>
+                  <SelectItem value="Mademoiselle">Mademoiselle</SelectItem>
+                </SelectContent>
+              </Select>
+              <FieldError field="civilite" />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="nom">Nom *</Label>
+              <Input
+                id="nom"
+                value={formData.nom || ""}
+                onChange={(e) => updateField("nom", e.target.value)}
+                placeholder="Nom de famille"
+              />
+              <FieldError field="nom" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="prenoms">Prénom(s) *</Label>
+              <Input
+                id="prenoms"
+                value={formData.prenoms || ""}
+                onChange={(e) => updateField("prenoms", e.target.value)}
+                placeholder="Prénom(s)"
+              />
+              <FieldError field="prenoms" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fonction">Fonction / Poste *</Label>
+              <Input
+                id="fonction"
+                value={formData.fonction || ""}
+                onChange={(e) => updateField("fonction", e.target.value)}
+                placeholder="Ex: Directeur commercial"
+              />
+              <FieldError field="fonction" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="nom_entreprise">Raison sociale *</Label>
               <Input
