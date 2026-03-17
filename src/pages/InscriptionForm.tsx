@@ -497,7 +497,7 @@ const InscriptionForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Comment avez-vous entendu parler de nous ?</Label>
+            <Label className="text-base font-semibold">Comment avez-vous entendu parler de nous ?</Label>
             <Select
               value={autreSource ? "autre" : (formData.source_id?.toString() || "")}
               onValueChange={(v) => {
@@ -511,7 +511,7 @@ const InscriptionForm = () => {
                 }
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-12 text-base">
                 <SelectValue placeholder="Sélectionner (optionnel)" />
               </SelectTrigger>
               <SelectContent>
@@ -528,7 +528,7 @@ const InscriptionForm = () => {
                 value={autreSourceTexte}
                 onChange={(e) => setAutreSourceTexte(e.target.value)}
                 placeholder="À préciser..."
-                className="mt-2"
+                className="mt-2 h-12 text-base"
               />
             )}
           </div>
