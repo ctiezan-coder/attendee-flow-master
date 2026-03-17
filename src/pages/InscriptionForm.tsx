@@ -124,12 +124,17 @@ const InscriptionForm = () => {
       if (customFields && customFields.length > 0) {
         const valuesToInsert = customFields
           .filter((f) => customValues[f.id] !== undefined && customValues[f.id] !== "")
-          .map((f) => ({
-            custom_field_id: f.id,
-            formation_id: formationId!,
-            participant_email: data.email,
-            value: customValues[f.id],
-          }));
+          .map((f) => {
+            let val = customValues[f.id];
+            const preciser = customValues[`${f.id}_preciser`];
+            if (preciser) val = `${val} : ${preciser}`;
+            return {
+              custom_field_id: f.id,
+              formation_id: formationId!,
+              participant_email: data.email,
+              value: val,
+            };
+          });
         if (valuesToInsert.length > 0) {
           const { error: valError } = await supabase.from("custom_field_values").insert(valuesToInsert);
           if (valError) console.error("Custom field values error:", valError);
