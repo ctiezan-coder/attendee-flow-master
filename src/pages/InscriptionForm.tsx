@@ -460,7 +460,7 @@ const InscriptionForm = () => {
             <Label className="text-base font-semibold">Secteur(s) d'activité(s) *</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {secteurs?.map((s) => (
-                <label key={s.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                <label key={s.id} className="flex items-center gap-2 text-base cursor-pointer">
                   <Checkbox
                     checked={(formData.secteur_ids || []).includes(s.id)}
                     onCheckedChange={() => toggleSecteur(s.id)}
